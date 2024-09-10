@@ -11,8 +11,9 @@ function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [file, setFile] = React.useState<File | null>(null);
 
-  const handleChange = (event: any) => {
-    setFile(event.target.files[0]);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    setFile(selectedFile || null);
   };
 
   useEffect(() => {
@@ -27,22 +28,7 @@ function App() {
   function deleteTodo(id: string) {
     client.models.Todo.delete({ id })
   }
-  const handleFileUpload = async () => {
-    if (file) {
-      try {
-        await uploadData({
-          path: `picture-submissions/${file.name}`,
-          data: file, // Ensure the file object is uploaded
-        });
-        alert("File uploaded successfully");
-      } catch (error) {
-        console.error("File upload error:", error);
-        alert("Failed to upload the file");
-      }
-    } else {
-      alert("No file selected. Please select a file before uploading.");
-    }
-  };
+
   return (
 
 
@@ -66,7 +52,18 @@ function App() {
           <button onClick={signOut}>Sign out</button>
           <div>
             <input type="file" onChange={handleChange} />
-            <button onClick={handleFileUpload}>
+            <button
+              onClick={() => {
+                if (file) {
+                  uploadData({
+                    path: `picture-submissions/${file.name}`,
+                    data: file,
+                  });
+                } else {
+                  alert("Please select a file first.");
+                }
+              }}
+            >
               Upload
             </button>
           </div>
