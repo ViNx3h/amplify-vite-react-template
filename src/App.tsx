@@ -7,13 +7,16 @@ import type { Schema } from "../amplify/data/resource";
 
 const client = generateClient<Schema>();
 
+interface File {
+  name: any,
+}
+
 function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
-  const [file, setFile] = React.useState<File | null>(null);
+  const [file, setFile] = React.useState<File>();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0];
-    setFile(selectedFile || null);
+  const handleChange = (event: any) => {
+    setFile(event.target.files[0]);
   };
 
   useEffect(() => {
@@ -53,16 +56,12 @@ function App() {
           <div>
             <input type="file" onChange={handleChange} />
             <button
-              onClick={() => {
-                if (file) {
-                  uploadData({
-                    path: `picture-submissions/${file.name}`,
-                    data: file,
-                  });
-                } else {
-                  alert("Please select a file first.");
-                }
-              }}
+              onClick={() =>
+                uploadData({
+                  path: `picture-submissions/${file?.name}`,
+                  data: file?.name,
+                })
+              }
             >
               Upload
             </button>
