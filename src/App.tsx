@@ -1,13 +1,20 @@
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { generateClient } from "aws-amplify/data";
-import { useEffect, useState } from "react";
+import { uploadData } from 'aws-amplify/storage';
+import React, { useEffect, useState } from 'react';
 import type { Schema } from "../amplify/data/resource";
 
 const client = generateClient<Schema>();
 
 function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
+
+  const [file, setFile] = React.useState();
+
+  const handleChange = (event: any) => {
+    setFile(event.target.files[0]);
+  };
 
   useEffect(() => {
     client.models.Todo.observeQuery().subscribe({
@@ -23,6 +30,7 @@ function App() {
   }
 
   return (
+
 
     <Authenticator>
       {({ signOut, user }) => (
@@ -42,10 +50,25 @@ function App() {
             </a>
           </div>
           <button onClick={signOut}>Sign out</button>
+          <div>
+            <input type="file" onChange={handleChange} />
+            <button
+              onClick={() =>
+                uploadData({
+                  path: `picture-submissions/${file.name}`,
+                  data: file,
+                })
+              }
+            >
+              Upload
+            </button>
+          </div>
         </main>
 
       )}
     </Authenticator>
+
+
   );
 }
 
