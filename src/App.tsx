@@ -9,7 +9,7 @@ const client = generateClient<Schema>();
 
 function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
-  const [file, setFile] = React.useState();
+  const [file, setFile] = React.useState<File | null>(null);
 
   const handleChange = (event: any) => {
     setFile(event.target.files[0]);
@@ -27,7 +27,22 @@ function App() {
   function deleteTodo(id: string) {
     client.models.Todo.delete({ id })
   }
-
+  const handleFileUpload = async () => {
+    if (file) {
+      try {
+        await uploadData({
+          path: `picture-submissions/${file.name}`,
+          data: file, // Ensure the file object is uploaded
+        });
+        alert("File uploaded successfully");
+      } catch (error) {
+        console.error("File upload error:", error);
+        alert("Failed to upload the file");
+      }
+    } else {
+      alert("No file selected. Please select a file before uploading.");
+    }
+  };
   return (
 
 
@@ -51,14 +66,7 @@ function App() {
           <button onClick={signOut}>Sign out</button>
           <div>
             <input type="file" onChange={handleChange} />
-            <button
-              onClick={() =>
-                uploadData({
-                  path: `picture-submissions/${file.name}`,
-                  data: file.name,
-                })
-              }
-            >
+            <button onClick={handleFileUpload}>
               Upload
             </button>
           </div>
