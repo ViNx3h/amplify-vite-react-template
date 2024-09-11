@@ -33,7 +33,7 @@ function App() {
   }
 
   const handleDisplay = async () => {
-    await list({
+    const isDisplay = await list({
       path: `picture-submissions/*`,
       options: {
         // Specify a target bucket using name assigned in Amplify Backend
@@ -44,6 +44,7 @@ function App() {
         }
       }
     });
+    console.log(isDisplay);
   }
 
 
