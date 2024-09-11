@@ -34,7 +34,7 @@ function App() {
 
   const handleDisplay = async () => {
     await list({
-      path: `picture-submissions/${file?.name}`,
+      path: `picture-submissions/*`,
       options: {
         // Specify a target bucket using name assigned in Amplify Backend
         // Alternatively, provide bucket name from console and associated region
