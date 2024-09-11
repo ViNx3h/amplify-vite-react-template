@@ -1,7 +1,7 @@
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { generateClient } from "aws-amplify/data";
-import { list, uploadData } from 'aws-amplify/storage';
+import { downloadData, list, uploadData } from 'aws-amplify/storage';
 import React, { useEffect, useState } from 'react';
 import type { Schema } from "../amplify/data/resource";
 
@@ -40,6 +40,18 @@ function App() {
   }
   )
 
+
+
+  const getData = async () => downloadData({
+    path: 'picture-submissions/*',
+    options: {
+      // Alternatively, provide bucket name from console and associated region
+      bucket: {
+        bucketName: 'amplify-d2x7let61n8fca-ma-amplifyteamdrivebucket28-90epohn8if9i',
+        region: 'ap-southeast-1'
+      }
+    }
+  }).result;
   return (
 
 
@@ -75,7 +87,7 @@ function App() {
             </button>
           </div>
           <div>Bucket's files</div>
-          <button onClick={result}>display</button>
+          <button onClick={getData}>getData</button>
         </main>
 
       )}
