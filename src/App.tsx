@@ -43,7 +43,7 @@ function App() {
 
 
   const getData = async () => downloadData({
-    path: `picture-submissions/avtmain.jpg`,
+    path: "picture-submissions/avtmain.jpg",
     options: {
       // Alternatively, provide bucket name from console and associated region
       bucket: {
