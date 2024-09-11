@@ -1,7 +1,7 @@
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { generateClient } from "aws-amplify/data";
-import { downloadData, uploadData } from 'aws-amplify/storage';
+import { list, uploadData } from 'aws-amplify/storage';
 import React, { useEffect, useState } from 'react';
 import type { Schema } from "../amplify/data/resource";
 
@@ -32,26 +32,33 @@ function App() {
     client.models.Todo.delete({ id })
   }
 
-  // const result = async () => list({
+  const handleDisplay = async () => {
+    await list({
+      path: `picture-submissions/${file?.name}`,
+      options: {
+        // Specify a target bucket using name assigned in Amplify Backend
+        // Alternatively, provide bucket name from console and associated region
+        bucket: {
+          bucketName: 'amplify-d2x7let61n8fca-ma-amplifyteamdrivebucket28-90epohn8if9i',
+          region: 'ap-southeast-1'
+        }
+      }
+    });
+  }
+
+
+
+
+  // const getData = async () => downloadData({
   //   path: `picture-submissions/*`,
   //   options: {
-  //     bucket: 'amplifyTeamDrive',
+  //     // Alternatively, provide bucket name from console and associated region
+  //     bucket: {
+  //       bucketName: 'amplify-d2x7let61n8fca-ma-amplifyteamdrivebucket28-90epohn8if9i',
+  //       region: 'ap-southeast-1'
+  //     }
   //   }
-  // }
-  // )
-
-
-
-  const getData = async () => downloadData({
-    path: `picture-submissions/*`,
-    options: {
-      // Alternatively, provide bucket name from console and associated region
-      bucket: {
-        bucketName: 'amplify-d2x7let61n8fca-ma-amplifyteamdrivebucket28-90epohn8if9i',
-        region: 'ap-southeast-1'
-      }
-    }
-  }).result;
+  // }).result;
   return (
 
 
@@ -87,7 +94,7 @@ function App() {
             </button>
           </div>
           <div>Bucket's files</div>
-          <button onClick={getData}>getData</button>
+          <button onClick={handleDisplay}>getData</button>
         </main>
 
       )}
