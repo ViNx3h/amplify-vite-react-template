@@ -33,12 +33,12 @@ function App() {
   }
 
   const result = async () => list({
-    path: `picture-submissions/${file?.name}`,
+    path: `picture-submissions/*`,
     options: {
       bucket: 'amplifyTeamDrive',
-      listAll: true,
     }
-  })
+  }
+  )
 
   return (
 
