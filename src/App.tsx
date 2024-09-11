@@ -1,7 +1,7 @@
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { generateClient } from "aws-amplify/data";
-import { uploadData } from 'aws-amplify/storage';
+import { list, uploadData } from 'aws-amplify/storage';
 import React, { useEffect, useState } from 'react';
 import type { Schema } from "../amplify/data/resource";
 
@@ -31,6 +31,14 @@ function App() {
   function deleteTodo(id: string) {
     client.models.Todo.delete({ id })
   }
+
+  const result = async () => list({
+    path: `picture-submissions/${file?.name}`,
+    options: {
+      bucket: 'amplifyTeamDrive',
+      listAll: true,
+    }
+  })
 
   return (
 
@@ -66,6 +74,8 @@ function App() {
               Upload
             </button>
           </div>
+          <div>Bucket's files</div>
+          <button onClick={result}>display</button>
         </main>
 
       )}
