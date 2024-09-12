@@ -1,7 +1,7 @@
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { generateClient } from "aws-amplify/data";
-import { list, uploadData } from 'aws-amplify/storage';
+import { downloadData, list, uploadData } from 'aws-amplify/storage';
 import React, { useEffect, useState } from 'react';
 import type { Schema } from "../amplify/data/resource";
 
@@ -11,13 +11,33 @@ interface File {
   name: any,
 }
 
+
 function App() {
+
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [file, setFile] = React.useState<File>();
+  const [state, setState] = useState();
+
+
 
   const handleChange = (event: any) => {
     setFile(event.target.files[0]);
   };
+
+  useEffect(() => {
+
+  }, []);
+
+  // useEffect(() => {
+  //   // Adding error handling in case the query fails
+  //   const subscription = client.models.List?.observeQuery?.().subscribe({
+  //     next: (data) => setState([...data.items]),
+  //     error: (error) => console.error("Error fetching data: ", error),
+  //   });
+
+  //   // Cleanup subscription when the component unmounts
+  //   return () => subscription?.unsubscribe();
+  // }, []);
 
   useEffect(() => {
     client.models.Todo.observeQuery().subscribe({
@@ -33,19 +53,42 @@ function App() {
   }
 
   const handleDisplay = async () => {
-    const isDisplay = await list({
-      path: `picture-submissions/*`,
+    try {
+      const isDisplay = await list({
+        path: `picture-submissions/`,
+
+        options: {
+          bucket: 'amplifyTeamDrive',
+          // Specify a target bucket using name assigned in Amplify Backend
+          // Alternatively, provide bucket name from console and associated region
+          listAll: true,
+
+        }
+
+      });
+      console.log('File Properties ', isDisplay);
+      console.log(isDisplay);
+      setState(isDisplay.items);
+    } catch (error) {
+      console.log('Error', error)
+    }
+
+  }
+
+  const handleDownload = async (path: string) => {
+    const isDownload = await downloadData({
+      path: path,
       options: {
-        // Specify a target bucket using name assigned in Amplify Backend
-        // Alternatively, provide bucket name from console and associated region
-        bucket: {
-          bucketName: 'amplify-d2x7let61n8fca-ma-amplifyteamdrivebucket28-90epohn8if9i',
-          region: 'ap-southeast-1'
+        bucket: 'amplifyTeamDrive',
+        onProgress: (progress: any) => {
+          console.log(`Download progress: ${(progress.transferredBytes / progress.totalBytes) * 100}%`);
         }
       }
-    });
-    console.log(isDisplay);
+
+    }).result;
+    console.log(isDownload);
   }
+
 
 
 
@@ -96,6 +139,12 @@ function App() {
           </div>
           <div>Bucket's files</div>
           <button onClick={handleDisplay}>getData</button>
+          <ul>
+            {state?.map((files: any) => (
+              <li onClick={() => handleDownload(files.path)} key={files.eTag}>{files.path}</li>
+            ))}
+          </ul>
+
         </main>
 
       )}
