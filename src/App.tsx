@@ -1,7 +1,7 @@
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { generateClient } from "aws-amplify/data";
-import { list, remove, uploadData } from 'aws-amplify/storage';
+import { list, uploadData } from 'aws-amplify/storage';
 import React, { useEffect, useState } from 'react';
 import type { Schema } from "../amplify/data/resource";
 
@@ -85,7 +85,7 @@ function App() {
       console.log('File Properties ', isDisplay);
       console.log(isDisplay);
       setState(isDisplay.items);
-
+      console.log(state);
     } catch (error) {
       console.log('Error', error)
     }
@@ -111,20 +111,20 @@ function App() {
   // }
 
 
-  const handleRemove = async (path: string) => {
-    try {
-      const isRemove = await remove({
-        path: path,
-        options: {
-          bucket: 'amplifyTeamDrive',
-        }
-      });
-      console.log(isRemove);
-    } catch (error) {
-      console.log('Error: ', error);
-    }
+  // const handleRemove = async (path: string) => {
+  //   try {
+  //     const isRemove = await remove({
+  //       path: path,
+  //       options: {
+  //         bucket: 'amplifyTeamDrive',
+  //       }
+  //     });
+  //     console.log(isRemove);
+  //   } catch (error) {
+  //     console.log('Error: ', error);
+  //   }
 
-  }
+  // }
 
 
   // const getData = async () => downloadData({
