@@ -15,7 +15,8 @@ function App() {
 
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [file, setFile] = React.useState<File>();
-  const [state, setState] = useState<any | undefined>(undefined);
+  // const [state, setState] = useState<any | undefined>(undefined);
+  const [data, setData] = useState<Array<Schema["Todo"]["type"]>>([]);
 
 
 
@@ -24,7 +25,8 @@ function App() {
   };
 
   useEffect(() => {
-
+    client.models.List.observeQuery().subscribe;
+    next: (list: any) => setData([...list.items])
   }, []);
 
   // useEffect(() => {
@@ -67,7 +69,7 @@ function App() {
       });
       console.log('File Properties ', isDisplay);
       console.log(isDisplay);
-      setState(isDisplay.items);
+      // setState(isDisplay.items);
     } catch (error) {
       console.log('Error', error)
     }
@@ -140,7 +142,7 @@ function App() {
           <button onClick={handleDisplay}>getData</button>
           <ul>
             {
-              state?.map((files: any) => (
+              data.map((files: any) => (
                 <li onClick={() => handleDownload(files.path)} key={files.eTag}>{files.path}</li>
               ))}
           </ul>
