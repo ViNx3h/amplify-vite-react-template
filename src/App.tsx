@@ -25,8 +25,9 @@ function App() {
   };
 
   useEffect(() => {
-    client.models.List.observeQuery().subscribe;
-    next: (list: any) => setData([...list.items])
+    client.models.List.observeQuery().subscribe({
+      next: (data) => setData([...data.items])
+    });
   }, []);
 
   // useEffect(() => {
