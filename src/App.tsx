@@ -1,7 +1,7 @@
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { generateClient } from "aws-amplify/data";
-import { downloadData, list, uploadData } from 'aws-amplify/storage';
+import { list, remove, uploadData } from 'aws-amplify/storage';
 import React, { useEffect, useState } from 'react';
 import type { Schema } from "../amplify/data/resource";
 
@@ -12,10 +12,10 @@ interface File {
 }
 
 function App() {
-  const [data, setData] = useState<Array<Schema["List"]["type"]>>([]);
+  // const [data, setData] = useState<Array<Schema["List"]["type"]>>([]);
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [file, setFile] = React.useState<File>();
-  // const [state, setState] = useState<any | undefined>(undefined);
+  const [state, setState] = useState<any | undefined>(undefined);
 
 
 
@@ -37,11 +37,11 @@ function App() {
   //   return () => subscription?.unsubscribe();
   // }, []);
 
-  useEffect(() => {
-    client.models.List.observeQuery().subscribe({
-      next: (data) => setData([...data.items]),
-    });
-  }, []);
+  // useEffect(() => {
+  //   client.models.List.observeQuery().subscribe({
+  //     next: (data) => setData([...data.items]),
+  //   });
+  // }, []);
 
   useEffect(() => {
     client.models.Todo.observeQuery().subscribe({
@@ -76,7 +76,7 @@ function App() {
       });
       console.log('File Properties ', isDisplay);
       console.log(isDisplay);
-      // setState(isDisplay.items);
+      setState(isDisplay.items);
 
     } catch (error) {
       console.log('Error', error)
@@ -84,29 +84,42 @@ function App() {
 
   }
 
-  const handleDownload = async (path: string) => {
-    const isDownload = await downloadData({
-      path: path,
-      options: {
-        bucket: 'amplifyTeamDrive',
-        onProgress: (progress: any) => {
-          console.log(`Download progress: ${(progress.transferredBytes / progress.totalBytes) * 100}%`);
+  // const handleDownload = async (path: string) => {
+  //   const isDownload = await downloadData({
+  //     path: path,
+  //     options: {
+  //       bucket: 'amplifyTeamDrive',
+  //       onProgress: (progress: any) => {
+  //         console.log(`Download progress: ${(progress.transferredBytes / progress.totalBytes) * 100}%`);
+  //       }
+  //     }
+  //   }).result;
+  //   console.log(isDownload);
+  //   // const isDisplay = await
+  //   //   client.models.List.create({ content: path })
+
+
+  //   // console.log(isDisplay);
+
+
+
+  // }
+
+
+  const handleRemove = async (path: string) => {
+    try {
+      const isRemove = await remove({
+        path: path,
+        options: {
+          bucket: 'amplifyTeamDrive',
         }
-      }
-    }).result;
-    console.log(isDownload);
-    const isDisplay = await
-      client.models.List.create({ content: path })
-
-
-    console.log(isDisplay);
-
-
+      });
+      console.log(isRemove);
+    } catch (error) {
+      console.log('Error: ', error);
+    }
 
   }
-
-
-
 
 
   // const getData = async () => downloadData({
@@ -157,8 +170,8 @@ function App() {
           <button onClick={handleDisplay}>getData</button>
           <ul>
             {
-              data.map((files: any) => (
-                <li onClick={() => handleDownload(files.path)} key={files.id}>{files.content}</li>
+              state?.map((files: any) => (
+                <li onClick={() => handleRemove(files.path)} key={files.id}>{files.path}</li>
               ))}
           </ul>
 
