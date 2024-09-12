@@ -11,12 +11,11 @@ interface File {
   name: any,
 }
 
-
 function App() {
 
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [file, setFile] = React.useState<File>();
-  const [state, setState] = useState();
+  const [state, setState] = useState<any | undefined>(undefined);
 
 
 
@@ -140,9 +139,10 @@ function App() {
           <div>Bucket's files</div>
           <button onClick={handleDisplay}>getData</button>
           <ul>
-            {state?.map((files: any) => (
-              <li onClick={() => handleDownload(files.path)} key={files.eTag}>{files.path}</li>
-            ))}
+            {
+              state?.map((files: any) => (
+                <li onClick={() => handleDownload(files.path)} key={files.eTag}>{files.path}</li>
+              ))}
           </ul>
 
         </main>
