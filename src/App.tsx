@@ -12,11 +12,11 @@ interface File {
 }
 
 function App() {
-  // const [data, setData] = useState<Array<Schema["List"]["type"]>>([]);
+  const [data, setData] = useState<Array<Schema["List"]["type"]>>([]);
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [file, setFile] = React.useState<File>();
   const [state, setState] = useState<any | undefined>(undefined);
-
+  console.log(data);
 
 
 
@@ -37,11 +37,11 @@ function App() {
   //   return () => subscription?.unsubscribe();
   // }, []);
 
-  // useEffect(() => {
-  //   client.models.List.observeQuery().subscribe({
-  //     next: (data) => setData([...data.items]),
-  //   });
-  // }, []);
+  useEffect(() => {
+    client.models.List.observeQuery().subscribe({
+      next: (data) => setData([...data.items]),
+    });
+  }, []);
 
   useEffect(() => {
     client.models.Todo.observeQuery().subscribe({
@@ -55,9 +55,17 @@ function App() {
   function deleteTodo(id: string) {
     client.models.Todo.delete({ id })
   }
-  // function deletePath(id: string) {
-  //   client.models.List.delete({ id })
-  // }
+  const deletePath = async (id: string) => {
+    try {
+      const isRemove = await (
+        client.models.List.delete({ id })
+      )
+      console.log(isRemove);
+    } catch (error) {
+      console.log('Error: ', error)
+    }
+
+  }
 
 
   const handleDisplay = async () => {
@@ -95,14 +103,11 @@ function App() {
   //     }
   //   }).result;
   //   console.log(isDownload);
-  //   // const isDisplay = await
-  //   //   client.models.List.create({ content: path })
+  //   const isDisplay = await
+  //     client.models.List.create({ content: path })
 
 
-  //   // console.log(isDisplay);
-
-
-
+  //   console.log(isDisplay);
   // }
 
 
@@ -170,8 +175,8 @@ function App() {
           <button onClick={handleDisplay}>getData</button>
           <ul>
             {
-              state?.map((files: any) => (
-                <li onClick={() => handleRemove(files.path)} key={files.id}>{files.path}</li>
+              data.map((files: any) => (
+                <li onClick={() => deletePath(files.id)} key={files.id}>{files.content}</li>
               ))}
           </ul>
 
