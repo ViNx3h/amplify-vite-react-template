@@ -15,7 +15,7 @@ function App() {
   const [data, setData] = useState<Array<Schema["List"]["type"]>>([]);
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [file, setFile] = React.useState<File>();
-  const [state, setState] = useState<any | undefined>(undefined);
+  // const [state, setState] = useState<any | undefined>(undefined);
 
 
 
@@ -55,9 +55,9 @@ function App() {
   function deleteTodo(id: string) {
     client.models.Todo.delete({ id })
   }
-  function deletePath(id: string) {
-    client.models.List.delete({ id })
-  }
+  // function deletePath(id: string) {
+  //   client.models.List.delete({ id })
+  // }
 
 
   const handleDisplay = async () => {
@@ -76,7 +76,7 @@ function App() {
       });
       console.log('File Properties ', isDisplay);
       console.log(isDisplay);
-      setState(isDisplay.items);
+      // setState(isDisplay.items);
 
     } catch (error) {
       console.log('Error', error)
