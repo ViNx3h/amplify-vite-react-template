@@ -12,11 +12,11 @@ interface File {
 }
 
 function App() {
-
+  const [data, setData] = useState<Array<Schema["List"]["type"]>>([]);
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [file, setFile] = React.useState<File>();
-  // const [state, setState] = useState<any | undefined>(undefined);
-  const [data, setData] = useState<Array<Schema["Todo"]["type"]>>([]);
+  const [state, setState] = useState<any | undefined>(undefined);
+
 
 
 
@@ -24,11 +24,7 @@ function App() {
     setFile(event.target.files[0]);
   };
 
-  useEffect(() => {
-    client.models.List.observeQuery().subscribe({
-      next: (data) => setData([...data.items])
-    });
-  }, []);
+
 
   // useEffect(() => {
   //   // Adding error handling in case the query fails
@@ -42,6 +38,12 @@ function App() {
   // }, []);
 
   useEffect(() => {
+    client.models.List.observeQuery().subscribe({
+      next: (data) => setData([...data.items]),
+    });
+  }, []);
+
+  useEffect(() => {
     client.models.Todo.observeQuery().subscribe({
       next: (data) => setTodos([...data.items]),
     });
@@ -53,6 +55,10 @@ function App() {
   function deleteTodo(id: string) {
     client.models.Todo.delete({ id })
   }
+  function deletePath(id: string) {
+    client.models.List.delete({ id })
+  }
+
 
   const handleDisplay = async () => {
     try {
@@ -70,7 +76,8 @@ function App() {
       });
       console.log('File Properties ', isDisplay);
       console.log(isDisplay);
-      // setState(isDisplay.items);
+      setState(isDisplay.items);
+
     } catch (error) {
       console.log('Error', error)
     }
@@ -86,9 +93,16 @@ function App() {
           console.log(`Download progress: ${(progress.transferredBytes / progress.totalBytes) * 100}%`);
         }
       }
-
     }).result;
     console.log(isDownload);
+    const isDisplay = await
+      client.models.List.create({ content: path })
+
+
+    console.log(isDisplay);
+
+
+
   }
 
 
@@ -144,7 +158,7 @@ function App() {
           <ul>
             {
               data.map((files: any) => (
-                <li onClick={() => handleDownload(files.path)} key={files.eTag}>{files.path}</li>
+                <li onClick={() => handleDownload(files.path)} key={files.id}>{files.content}</li>
               ))}
           </ul>
 
