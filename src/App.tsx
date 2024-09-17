@@ -1,7 +1,7 @@
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { generateClient } from "aws-amplify/data";
-import { list, uploadData } from 'aws-amplify/storage';
+import { uploadData } from 'aws-amplify/storage';
 import React, { useEffect, useState } from 'react';
 import type { Schema } from "../amplify/data/resource";
 
@@ -15,7 +15,7 @@ function App() {
   const [data, setData] = useState<Array<Schema["List"]["type"]>>([]);
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [file, setFile] = React.useState<File>();
-  const [state, setState] = useState<any | undefined>(undefined);
+  // const [state, setState] = useState<any | undefined>(undefined);
   console.log(data);
 
 
@@ -68,29 +68,29 @@ function App() {
   }
 
 
-  const handleDisplay = async () => {
-    try {
-      const isDisplay = await list({
-        path: `picture-submissions/`,
+  // const handleDisplay = async () => {
+  //   try {
+  //     const isDisplay = await list({
+  //       path: `picture-submissions/`,
 
-        options: {
-          bucket: 'amplifyTeamDrive',
-          // Specify a target bucket using name assigned in Amplify Backend
-          // Alternatively, provide bucket name from console and associated region
-          listAll: true,
+  //       options: {
+  //         bucket: 'amplifyTeamDrive',
+  //         // Specify a target bucket using name assigned in Amplify Backend
+  //         // Alternatively, provide bucket name from console and associated region
+  //         listAll: true,
 
-        }
+  //       }
 
-      });
-      console.log('File Properties ', isDisplay);
-      console.log(isDisplay);
-      setState(isDisplay.items);
-      console.log(state);
-    } catch (error) {
-      console.log('Error', error)
-    }
+  //     });
+  //     console.log('File Properties ', isDisplay);
+  //     console.log(isDisplay);
+  //     setState(isDisplay.items);
+  //     console.log(state);
+  //   } catch (error) {
+  //     console.log('Error', error)
+  //   }
 
-  }
+  // }
 
   // const handleDownload = async (path: string) => {
   //   const isDownload = await downloadData({
@@ -172,7 +172,7 @@ function App() {
             </button>
           </div>
           <div>Bucket's files</div>
-          <button onClick={handleDisplay}>getData</button>
+          {/* <button onClick={handleDisplay}>getData</button> */}
           <ul>
             {
               data.map((files: any) => (
