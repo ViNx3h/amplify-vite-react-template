@@ -1,28 +1,27 @@
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 import { generateClient } from "aws-amplify/data";
-import { uploadData } from 'aws-amplify/storage';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Schema } from "../amplify/data/resource";
 
 const client = generateClient<Schema>();
 
-interface File {
-  name: any,
-}
+// interface File {
+//   name: any,
+// }
 
 function App() {
   const [data, setData] = useState<Array<Schema["List"]["type"]>>([]);
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
-  const [file, setFile] = React.useState<File>();
+  // const [file, setFile] = React.useState<File>();
   // const [state, setState] = useState<any | undefined>(undefined);
   console.log(data);
 
 
 
-  const handleChange = (event: any) => {
-    setFile(event.target.files[0]);
-  };
+  // const handleChange = (event: any) => {
+  //   setFile(event.target.files[0]);
+  // };
 
 
 
@@ -158,7 +157,7 @@ function App() {
             </a>
           </div>
           <button onClick={signOut}>Sign out</button>
-          <div>
+          {/* <div>
             <input type="file" onChange={handleChange} />
             <button
               onClick={() =>
@@ -170,7 +169,7 @@ function App() {
             >
               Upload
             </button>
-          </div>
+          </div> */}
           <div>Bucket's files</div>
           {/* <button onClick={handleDisplay}>getData</button> */}
           <ul>
